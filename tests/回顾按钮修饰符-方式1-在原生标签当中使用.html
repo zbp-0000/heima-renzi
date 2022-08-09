@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- <input @keyup="handleKeyup"/> -->
+    <!-- <input @keyup.13="handleKeyup"/> -->
+    <input @keyup.enter="handleKeyup"/>
+  </div>
+</body>
+<script>
+new Vue({
+  el: '#app',
+  methods: {
+    handleKeyup(e){
+      // console.log('按钮抬起',e)
+      /*
+      if(e.keyCode === 13){
+        console.log('按下回车')
+      }
+      */
+      console.log('按下回车')
+    }
+  },
+})
+</script>
+</html>

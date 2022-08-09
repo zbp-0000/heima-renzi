@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- @组件使用,组件通信 -->
+    <!-- 注意:按钮修饰符要作用于冒泡事件,不能作用于组件通信 -->
+    <!-- 不可以的 -->
+    <!-- <el-input @keyup.enter="handleKeyup"/> -->
+    <!-- 如果对组件要监听回车事件,只能用冒泡 -->
+    <!--
+    <div @keyup.enter="handleKeyup">
+      <el-input/>
+    </div>
+    -->
+    <el-input @keyup.native.enter="handleKeyup"/>
+  </div>
+</body>
+<script>
+// @keyup="$emit('keyup')"
+Vue.component('el-input', {
+  template: `
+    <div>
+      <input/>
+    </div>
+  `
+})
+new Vue({
+  el: '#app',
+  methods: {
+    handleKeyup(e){
+      // console.log('按钮抬起',e)
+      /*
+      if(e.keyCode === 13){
+        console.log('按下回车')
+      }
+      */
+      console.log('按下回车')
+    }
+  },
+})
+</script>
+</html>

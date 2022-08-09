@@ -1,6 +1,13 @@
 import axios from 'axios'
+import { Message } from 'element-ui'
 const request = axios.create({
-  baseURL: ''
+  /*
+  baseURL: 'http://ihrm-java.itheima.net/api'
+  // 用环境变量文件中数据
+  如果当前是开发环境，会去.env.development文件中取数据
+  如果当前是生产环境，会去.env.produceiont文件中取数据
+  */
+  baseURL: process.env.VUE_APP_BASE_API
 })
 
 // 写请求和响应拦截器
@@ -14,11 +21,25 @@ request.interceptors.request.use(config => {
   return Promise.reject(error)
 })
 
+// 响应拦截器
+// 错误处理-方式2-在响应拦截器统一处理错误
 request.interceptors.response.use(response => {
-// Do something before response is sent
-  return response
+  // 状态码为200，success为false的错误
+  const { data: { success, message, data }} = response
+  // 如果成功则保存token
+  if (success) {
+    // 简化数据返回，直接返回数据
+    console.log(data)
+    return data
+  } else {
+    Message.error(message)
+    // 产生一个错误，组织代码执行
+    return new Error(message)
+  }
 }, error => {
+  // 状态码为400、500的错误
 // Do something with response error
+  Message.error('请求失败')
   return Promise.reject(error)
 })
 

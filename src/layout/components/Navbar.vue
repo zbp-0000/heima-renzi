@@ -2,28 +2,45 @@
   <div class="navbar">
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb class="breadcrumb-container" />
+    <div class="app-breadcrumb">
+      江苏传智播客教育科技股份有限公司
+      <span class="breadBtn">体验版</span>
+    </div>
+    <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
+          <!-- 用户头像 通过 映射函数 mapGetters 来获取 -->
+          <!-- 加载线上的图片 -->
+          <!-- <img
+            v-imgerror="'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg'"
+            :src="avatar"
+            class="user-avatar"
+          > -->
+
+          <!-- 加载本地的图片 -->
+          <img
+            v-imgerror="require('../../assets/common/head.jpg')"
+            :src="avatar"
+            class="user-avatar"
+          >
+
+          <!-- 用户昵称 通过 映射函数 mapGetters 来获取 -->
+          <span class="name">{{ name }}</span>
+          <i class="el-icon-caret-bottom" style="color:#fff" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              Home
+              首页
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>Docs</el-dropdown-item>
+          <a target="_blank" href="https://gitee.com/shuiruohanyu/hrsaas53">
+            <el-dropdown-item>项目地址</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
+            <span style="display:block;">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -33,18 +50,19 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
+// import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 
 export default {
   components: {
-    Breadcrumb,
+    // Breadcrumb,
     Hamburger
   },
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'name'
     ])
   },
   methods: {
@@ -52,7 +70,11 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
+      // this.$store.dispatch('user/logout') 调用user模块里的 logout 方法
+      // 这里调用action，不是因为异步方法，而是它要调用其他mutations
       await this.$store.dispatch('user/logout')
+      // 为什么要传 ?redirect 这个参数？
+      // 因为产品经历、运营要统计数据（用户从哪里进来登录的，专业名称叫埋点）
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
@@ -64,7 +86,8 @@ export default {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background: #fff;
+  // background: #fff;
+  background: -webkit-linear-gradient(bottom, #3d6df8, #5b8cff);
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
@@ -118,12 +141,22 @@ export default {
         margin-top: 5px;
         position: relative;
 
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
+          .user-avatar {
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            vertical-align: middle;
+
+          }
+          .name {
+                  color: #fff;
+                  vertical-align: middle;
+                  margin-left:5px;
+          }
+          .user-dropdown {
+                  color: #fff;
+          }
 
         .el-icon-caret-bottom {
           cursor: pointer;
@@ -133,6 +166,25 @@ export default {
           font-size: 12px;
         }
       }
+    }
+  }
+
+  .app-breadcrumb {
+    display: inline-block;
+    font-size: 18px;
+    line-height: 50px;
+    margin-left: 10px;
+    color: #ffffff;
+    cursor: text;
+    .breadBtn {
+      background: #84a9fe;
+      font-size: 14px;
+      padding: 0 10px;
+      display: inline-block;
+      height: 30px;
+      line-height: 30px;
+      border-radius: 10px;
+      margin-left: 15px;
     }
   }
 }

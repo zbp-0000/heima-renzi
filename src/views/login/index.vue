@@ -113,7 +113,7 @@ export default {
       // 校验表单 - element校验的方法：validate(回调函数) ，如果不传回调函数，则返回一个 Promise3
       try {
         await this.$refs.loginForm.validate()
-        console.log('校验成功')
+        // console.log('校验成功')
         await this.$store.dispatch('user/login', this.loginForm)
         this.$router.push('/')
       } catch (error) {

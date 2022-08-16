@@ -115,3 +115,19 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+// 扁平结构转换树形结构 ===> departments/index.vue
+export function tranListToTreeData(arr, pid) {
+  const children = []
+  arr.forEach(t => {
+    if (t.pid === pid) {
+      // 继续找当前元素的孩子
+      const surrentItemCHildren = tranListToTreeData(arr, t.id)
+      if (surrentItemCHildren.length > 0) {
+        t.children = surrentItemCHildren
+      }
+      children.push(t)
+    }
+  })
+  return children
+}

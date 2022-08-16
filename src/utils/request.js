@@ -1,3 +1,5 @@
+import router from '@/router'
+import store from '@/store'
 import axios from 'axios'
 import { Message } from 'element-ui'
 const request = axios.create({
@@ -13,8 +15,12 @@ const request = axios.create({
 // 写请求和响应拦截器
 // 方式一：去官方文档复制
 // 方式二：代码片段 拦截器的代码片段：简写 airu
+
 request.interceptors.request.use(config => {
 // Do something before request is sent
+  if (store.state.user.token) {
+    config.headers.Authorization = 'Bearer ' + store.state.user.token
+  }
   return config
 }, error => {
 // Do something with request error
@@ -38,7 +44,14 @@ request.interceptors.response.use(response => {
   }
 }, error => {
   // 状态码为400、500的错误
-// Do something with response error
+  // Do something with response error
+
+  // 模拟 token 失效
+  if (error.response && error.response.status === 401) {
+    store.dispatch('user/logout')
+    router.push('/login')
+  }
+
   Message.error('请求失败')
   return Promise.reject(error)
 })

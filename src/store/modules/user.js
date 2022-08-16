@@ -1,21 +1,34 @@
-import { login } from '@/api/user'
+import { login, getUserBaseInfo, getEmplyeeBaseInfo } from '@/api/user'
 import { getToken, removeToken, setToken } from '@/utils/auth'
 // import { Message } from 'element-ui'
 
 export default {
   namespaced: true,
 
-  // 报错数据
+  // 数据
   state: {
-    token: getToken()
+    token: getToken(),
+    // 定义用户数据: 头像/昵称
+    userInfo: {}
   },
 
   // 修改数据
   mutations: {
+    // 保存用户数据
+    setUserInfo(state, userInfo) {
+      state.userInfo = userInfo
+    },
+    // 清除用户数据
+    removeUserInfo(state, userInfo) {
+      state.userInfo = {}
+    },
+
+    // 获取 token
     setToken(state, token) {
       state.token = token
       setToken(token)
     },
+    // 删除token
     removeToken(state) {
       state.token = undefined
       removeToken()
@@ -24,6 +37,18 @@ export default {
 
   // 异步修改
   actions: {
+    // 退出时,清空公共(用户)数据
+    logout(context) {
+      context.commit('removeToken')
+      context.commit('removeUserInfo')
+    },
+
+    async getUserInfo(context) {
+      const u = await getUserBaseInfo() // u 这个接口 里面有用户 id
+      const e = await getEmplyeeBaseInfo(u.Id) // 这个接口需要传一个 用户id
+      context.commit('setUserInfo', { ...u, ...e })
+    },
+
     // 调用登录接口
     async login(context, data) {
       /*

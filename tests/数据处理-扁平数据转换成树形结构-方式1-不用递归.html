@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+let list = [
+  {id: 1, name: '节点1', pid: ''},
+  {id: 11, name: '节点1-1', pid: 1},
+  {id: 111, name: '节点1-1-1', pid: 11},
+  {id: 12, name: '节点1-2', pid: 1},
+  {id: 2, name: '节点2', pid: ''},
+  {id: 21, name: '节点2-1', pid: 2}
+]
+
+// 分析生成树形结构，需要做哪些事情
+// （1）找children 循环遍历找
+list.forEach(t=>{
+  let children = list.filter(m=> m.id === t.id)
+  if(children.leng>0) {
+    t.children = children
+  }
+})
+console.log('list', list);
+
+// （2）找一级/根元素
+let result = list.filter(t => t.pid === '')
+console.log('result', result);
+</script>
+</html>

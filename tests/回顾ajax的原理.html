@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+let xhr = new XMLHttpRequest()
+//get传参,通过url传参,查询字符串
+let form = {
+  username: 'admin',
+  password: 'abc123'
+}
+/*
+xhr.open('get', 'http://localhost:8080/api/login?username='+form.username+'&password='+form.password)
+xhr.send()
+*/
+// post传参,通过请求体,通过send方法传参
+xhr.open('post', 'http://localhost:8080/api/login')
+// 方式1-默认传参方式是url-encoded,查询字符串,原始一种格式
+// xhr.send('username='+form.username+'&password='+form.password)
+// 方式2-json格式(最流行的)
+/*
+xhr.setRequestHeader('Content-Type', 'application/json')
+xhr.send(JSON.stringify(form))
+*/
+// 方式3-formData(上传文件)
+let fromData = new FormData()
+fromData.append('file', file)
+formData.append('useranme', form.username)
+formData.append('password', form.password)
+xhr.send(formData)
+
+xhr.onload = function(){
+  console.log(xhr.responseText)
+}
+</script>
+</html>

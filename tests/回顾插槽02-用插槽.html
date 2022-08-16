@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <my-component>
+      <h3>标题</h3>
+    </my-component>
+  </div>
+</body>
+<script>
+// 插槽
+// 什么是插槽
+// 用途:父组件传标签给子组件
+// 特征:父组件通过子组件的标签题传内容,子组件通过<slot></slot>
+Vue.component('my-component', {
+  // 默认插槽
+  template: `
+    <div>子组件
+      <slot></slot>
+    </div>
+
+  `
+})
+new Vue({
+  el: '#app',
+  data(){
+    return {
+    }
+  }
+})
+</script>
+</html>

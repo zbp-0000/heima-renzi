@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 方式2-通过v-bind/@ -->
+    <img :src="imgPath" ref="imgRef" @error="imgPath = 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg'"/>
+  </div>
+</body>
+<script>
+new Vue({
+  el: '#app',
+  data(){
+    return {
+      imgPath: 'http://q6cu3t6jv.bkt.clouddn.com/1063705989926227968?t=1582797590950'
+    }
+  },
+  mounted() {
+    //方式1-通过refs得到页面元素
+    /*
+    this.$refs.imgRef.onerror = ()=>{
+      this.imgPath = 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg'
+    }
+    */
+  },
+})
+</script>
+</html>

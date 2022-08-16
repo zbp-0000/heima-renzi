@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/axios/0.26.0/axios.js" type="application/javascript"></script>
+  <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/qs/6.10.3/qs.js" type="application/javascript"></script>
+</head>
+<body>
+
+</body>
+<script>
+/*
+(1)发请求,需要些什么?
+请求地址:https://demo-api.apipost.cn/api/demo/login
+请求方式:POST
+请求传参:
+  mobile: 18289454846
+  ver_code: 123456
+请求数据格式:
+  multipart/form-data
+(2)人资/头条请求是什么类型?
+  从接口文档Headers,Content-Type = application/json
+  我们的接口方式是JSON方式
+(3)请求格式multipart/form-data是什么类型?
+
+*/
+let request = axios.create({
+  baseURL: 'https://demo-api.apipost.cn/api'
+})
+let form = {
+  mobile: '18289454846',
+  ver_code: '123456'
+}
+/*
+let formData = new FormData()
+formData.append('mobile', form.mobile)
+formData.append('ver_code', form.ver_code)
+*/
+request({
+  url: '/demo/login',
+  method: 'POST',
+  // 如何判断请求格式,通过请求头,content-type
+  // 格式1-json格式,axios对json格式支持最好
+  // data: form
+  // 格式2-form-data,multipart/form-data;
+  // 首先,查询axios官方文档,再百度
+  // data: formData
+  // 格式3-urlencoded
+  // 参考:http://www.axios-js.com/zh-cn/docs/#%E4%BD%BF%E7%94%A8-application-x-www-form-urlencoded-format
+  // data: `mobile=${form.mobile}&ver_code=${form.ver_code}`
+  // 报错,说qs没有
+  // 方式1-去npm包找说明,没有专门讲浏览器引入如何使用,并且英文的
+  // 方式2-去window找
+  data: Qs.stringify(form)
+}).then((data)=>{
+  console.log('data', data)
+}).catch((error)=>{
+  console.log('error', error)
+})
+</script>
+</html>

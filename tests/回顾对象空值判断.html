@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+let userInfo = {}
+
+// console.log(userInfo === {}) //false,对象是复杂数据类型,比较地址
+// console.log({} === {}) // false,
+// console.log('' === '') //true,字符串是基础数据类型,比较值
+
+// 方式1-通过JSON.stringify,把对象转换JSON字符串,转换类型,地址转换值
+// console.log(JSON.stringify(userInfo) === "{}") // true
+
+// 方式2-Object.keys,把对象转换数组
+// 如何判断数组为空
+/*
+let list = []
+// console.log(list === [])//fasle, 数组是复杂数据类型,比较地址
+console.log(list.length === 0) //true,数组判断长度
+*/
+
+// 如何把对象转换数组,通过es6,Object.keys,Object.values
+/*
+let obj = {username: 'zs', age: 20}
+// console.log(Object.keys(obj)) //['username', 'age']
+console.log(Object.values(obj)) //['zs', 20]
+*/
+// console.log(Object.keys(userInfo).length === 0)
+
+//方式3-判断里面有没有字段,例如userId
+// console.log(userInfo.userId === undefined)
+console.log(!userInfo.userId)
+
+</script>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!--
+      自定义指令:
+      用途:操作dom元素的
+      特征: 自定义的 v-xxx标签属性 ===> 不能驼峰命名
+     -->
+    <img :src="imgPath" v-imgerror = "'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg'" />
+  </div>
+</body>
+<script>
+  Vue.directive('imgerror', {
+    // 钩子函数
+    // el 是dom 元素,哪个标签使用了,就传的哪个标签DOM
+    inserted(el, options) {
+      // if(!el.src) {
+      //   el.src = 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg'
+      // }
+      el.onerror = function() {
+        this.src = options.value
+      }
+    },
+
+    // 钩子函数
+    // 当前页面元素改变,执行这个钩子函数
+    update(el, options) {
+      if(!el.src) {
+        el.src = options.value
+      }
+    }
+  })
+new Vue({
+  el: '#app',
+  data(){
+    return {
+      // 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg'
+      // imgPath: 'http://q6cu3t6jv.bkt.clouddn.com/1063705989926227968?t=1582797590950'
+      imgPath: undefined
+    }
+  },
+  created() {
+    setTimeout(() => {
+      this.imgPath = null
+    }, 500)
+  }
+})
+</script>
+</html>

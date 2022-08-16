@@ -12,8 +12,18 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+import '@/directives' // 图片加载; Bavbar.vue 可以引入
+
 import '@/icons' // icon
 import '@/permission' // permission control
+import '@/directives'
+
+// 注册全局组件-方式1-通过：component
+// import '@/components'
+
+// 注册全局组件-方式2-通过：Vue.use
+import Ui from '@/components/index.js'
+Vue.use(Ui)
 
 /**
  * If you don't want to use mock-server

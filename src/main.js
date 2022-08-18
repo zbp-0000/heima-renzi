@@ -25,6 +25,21 @@ import '@/directives'
 import Ui from '@/components/index.js'
 Vue.use(Ui)
 
+// -------------过滤器-----------
+
+// 注册全局过滤器：时间过滤器
+// import '@/filters/index'
+
+// 注册全局过滤器，方式2-单个注册
+// import { formatDate } from '@/filters/index'
+// Vue.filter('formatDate', formatDate)
+
+// 注册过滤器-方式2-批量注册
+import * as filters from '@/filters/index'
+Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
+
+// -------------过滤器-----------
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

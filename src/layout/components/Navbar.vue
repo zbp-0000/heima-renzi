@@ -21,7 +21,7 @@
 
           <!-- 加载本地的图片 -->
           <img
-            v-imgerror="require('../../assets/common/head.jpg')"
+            v-imgerror="require('@/assets/common/head.jpg')"
             :src="avatar"
             class="user-avatar"
           >

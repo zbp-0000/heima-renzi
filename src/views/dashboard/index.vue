@@ -3,6 +3,8 @@
     <div class="dashboard-text">name: {{ name }}</div>
 
     <qrcode-vue :value="value"></qrcode-vue>
+    <!-- 引入组件 -->
+    <UploadExcel></UploadExcel>
   </div>
 </template>
 

@@ -9,7 +9,11 @@
         <!-- 多个标签推荐用 v-slot:插槽名 或 #插槽名 -->
         <template #after>
           <el-button type="danger" size="small" @click="onExport">excel导出</el-button>
-          <el-button type="success" size="small">excel导入</el-button>
+          <el-button
+            type="success"
+            size="small"
+            @click="$router.push('/import')"
+          >excel导入</el-button>
           <el-button type="primary" size="small" @click="showAddDialog = true">新增员工</el-button>
         </template>
       </PageTools>
@@ -45,7 +49,12 @@
           </el-table-column>
           <el-table-column prop="" label="操作" sortable="" fixed="right" width="280">
             <template v-slot="{row}">
-              <el-button type="text" size="small">查看</el-button>
+
+              <!-- 路由传参方式一：params === 通过动态参数 -->
+              <el-button type="text" size="small" @click="$router.push('/employees/detail/' + row.id)">查看</el-button>
+
+              <!-- 路由传参方式二：query === 通过查询字符串 -->
+              <!-- <el-button type="text" size="small" @click="$router.push('/employees/detail?id=' + row.id)">查看</el-button> -->
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
@@ -132,10 +141,12 @@
 
 <script>
 import { addEmployee, delEmployee, getEmployeeList } from '@/api/employees'
+import { pick } from 'lodash'
 import EmployeesEnum from '@/api/constant/employees' // 枚举的数据
 import QrcodeVue from 'qrcode.vue'
 import { getDepartments } from '@/api/departments'
 import { tranListToTreeData } from '@/utils'
+import { formatDate } from '@/filters'
 // import { appendFileSync } from 'fs'
 export default {
   name: 'EmployeesIndex',
@@ -222,21 +233,32 @@ export default {
   },
   methods: {
     async onExport() {
-      const headers = {
-        '手机号': 'mobile',
-        '姓名': 'username',
-        '入职日期': 'timeOfEntry',
-        '聘用形式': 'formOfEmployment',
-        '转正日期': 'correctionTime',
-        '工号': 'workNumber',
-        '部门': 'departmentName'
-      }
-      const { rows } = await getEmployeeList({ page: 1, size: this.page.total })
-      console.log(rows)
       import('@/vendor/Export2Excel').then(async excel => {
+        const headers = {
+          '手机号': 'mobile',
+          '姓名': 'username',
+          '入职日期': 'timeOfEntry',
+          '聘用形式': 'formOfEmployment',
+          '转正日期': 'correctionTime',
+          '工号': 'workNumber',
+          '部门': 'departmentName'
+        }
+        const { rows } = await getEmployeeList({ page: 1, size: this.page.total })
+        console.log(rows)
+
+        // 导出 excle 表格
+        const data = rows.map(t => {
+          const n = pick(t, Object.values(headers))
+          // 格式化数据
+          n.timeOfEntry = formatDate(n.timeOfEntry)
+          n.correctionTime = formatDate(n.correctionTime)
+          n.formOfEmployment = this.$options.filters.formOfEmployment(n.formOfEmployment)
+          return Object.values(n)
+        })
+
         excel.export_json_to_excel({
           header: Object.keys(headers), // 表头 必填
-          data: [['zs', '5000'], ['ls', '8000']], // 具体数据 必填
+          data, // 具体数据 必填
           filename: 'excel-list', // 非必填
           autoWidth: true, // 非必填
           bookType: 'xlsx' // 非必填

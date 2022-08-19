@@ -62,5 +62,24 @@
         staffPhoto: " ",
       },
     ];
+
+    /*
+    目标data格式
+    data = [
+      ['13800000002', '纪同伟'，...], []
+    ]
+    */
+    const data = rows.map(t => {
+        const n = pick(t, Object.values(headers))
+        return Object.values(n)
+      })
+
+      excel.export_json_to_excel({
+        header: Object.keys(headers),
+        data,
+        filename: 'excel-list',
+        autoWidth: true,
+        bookType: 'xlsx'
+      })
   </script>
 </html>

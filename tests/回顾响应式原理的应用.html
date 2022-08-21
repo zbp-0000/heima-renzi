@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- <div>{{obj.username}}--{{obj.age}}</div> -->
+    <!-- <ul>
+      <li v-for="item in list">{{item}}</li>
+    </ul> -->
+    <!-- 对象数组 -->
+    <ul>
+      <li v-for="item in fileList">{{item.url}}--{{item.name}}</li>
+    </ul>
+  </div>
+</body>
+<script>
+var vm = new Vue({
+  el: '#app',
+  data(){
+    return {
+      obj: {
+        username: 'zs'
+      },
+      // 普通数组
+      list: [1,2,3],
+      // 对象数组
+      fileList: [{url: 'url1'}, {url:'url2'}]
+    }
+  },
+  mounted() {
+    setTimeout(()=>{
+      //问题,对对象不存在的key赋值,不是响应式
+      // this.obj.age = 20
+      // 不可以用$nextTick
+      /*
+      this.$nextTick(()=>{
+        this.obj.age = 20
+      })
+      */
+      // 对象-解决方式1-整体赋值
+      /*
+      this.obj = {
+        username:'ls',
+        age: 20
+      }
+      */
+     // 对象-解决方式2-$set
+      // this.$set(this.obj,'age', 20)
+      //问题,对普通数组通过索引添加/修改元素不是响应式
+      // this.list[3] = 4
+      // this.list[0] = 0
+      //普通数组-解决方式1-整体赋值
+      // this.list = [...this.list, 4]
+      //普通数组-解决方式2-$set
+      // this.$set(this.list,3, 4)
+      // this.$set(this.list,0, 0)
+
+
+      //对象数组
+      //问题,对对象数组通过索引添加元素不是响应式
+      // this.fileList[2] = {url: 'url3'}
+      // this.fileList[0].url = 'url0' //是响应式的,因为对对象存在属性赋值
+      // this.fileList[0].name = 'name0' //不是响应是,因为对对象不存在的属性赋值
+      // 通过整体赋值
+      /*
+      this.fileList = this.fileList.map((t,i)=>{
+        if(i==0){
+          return {url: 'url0'}
+        }else{
+          return t
+        }
+      })
+      */
+      // 通过$set
+    })
+  },
+})
+</script>
+</html>

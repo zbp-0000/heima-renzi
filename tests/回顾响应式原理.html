@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+
+  </div>
+</body>
+<script>
+/*
+let obj = {username: 'zs'}
+obj._username = obj.username
+//监听对象数据变化
+Object.defineProperty(obj,'username',{
+  set(val){
+    console.log('set')
+    this._username = val
+  },
+  get(){
+    console.log('get')
+    return this._username
+  }
+})
+obj.username = 'ls'//调用set方法
+obj.username //get
+*/
+//监听数组的变化,覆盖数组原型链上面方法
+let push = Array.prototype.push
+Array.prototype.push = function(val){
+  console.log('调用了push')
+  push.call(this, val)
+}
+var list = [1,2,3]
+list.push(4)
+// list[3] = 4 //监听不了
+</script>
+</html>

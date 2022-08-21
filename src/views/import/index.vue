@@ -25,7 +25,7 @@ export default {
         '工号': 'workNumber'
       }
       const data = []
-      // 导入
+      // 循环数组，把中文转化成英文
       results.forEach(t => {
         const item = {}
         for (const key in t) {

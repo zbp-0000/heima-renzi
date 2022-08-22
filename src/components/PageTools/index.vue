@@ -3,7 +3,11 @@
     <el-row type="flex">
       <!-- 左边 -->
       <el-col>
-        <div class="before">
+        <!-- 方式一： -->
+        <!-- <div v-if="hasBefore" class="before"> -->
+
+        <!-- 方式二： -->
+        <div v-if="$slots.before" class="before">
           <i class="el-icon-info"></i>
           <slot name="before"></slot>
         </div>
@@ -22,6 +26,12 @@
 <script>
 export default {
   name: 'PageTools',
+  props: {
+    hasBefore: {
+      type: Boolean,
+      default: () => true
+    }
+  },
   data() {
     return {
 

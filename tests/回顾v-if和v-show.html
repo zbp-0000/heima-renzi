@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- v-show通过控制元素的样式,display:none -->
+    <!-- <div v-show="isShow">通过v-show控制</div> -->
+    <!-- v-if通过控制元素是否存在 -->
+    <!-- <div v-if="isShow">通过v-if控制</div> -->
+    <!-- v-show通过控制组件的样式,display:none -->
+    <!-- <my-count v-show="isShow"></my-count> -->
+     <!-- v-if通过组件元素是否存在 -->
+    <my-count v-if="isShow"></my-count>
+  </div>
+</body>
+<script>
+Vue.component('my-count',{
+  data(){
+    return {
+      count: 0
+    }
+  },
+  template: `
+    <button @click="count++">{{count}}</button>
+  `
+})
+new Vue({
+  el: '#app',
+  data(){
+    return {
+      isShow: true
+    }
+  }
+})
+</script>
+</html>

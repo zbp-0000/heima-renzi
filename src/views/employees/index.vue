@@ -58,7 +58,7 @@
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button type="text" size="small" @click="onAssignRole(row.id)">角色</el-button>
               <el-button type="text" size="small" @click="onDel(row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -136,6 +136,17 @@
         <el-button type="primary" @click="handelConfirm">确定</el-button>
       </el-row>
     </el-dialog>
+
+    <el-dialog title="分配角色" :visible="showAssignRoleDialog">
+      <el-checkbox-group v-model="checkRoleList">
+        <el-checkbox v-for="(item, index) in roleList" :key="index" :label="item.id">{{ item.name }}</el-checkbox>
+      </el-checkbox-group>
+
+      <el-row slot="footer" type="fiex" justify="center">
+        <el-button @click="showAssignRoleDialog = false">取消</el-button>
+        <el-button type="primary" @click="handelAssignRoleConfirm">确认</el-button>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
@@ -147,6 +158,7 @@ import QrcodeVue from 'qrcode.vue'
 import { getDepartments } from '@/api/departments'
 import { tranListToTreeData } from '@/utils'
 import { formatDate } from '@/filters'
+import { getRoleList } from '@/api/setting'
 // import { appendFileSync } from 'fs'
 export default {
   name: 'EmployeesIndex',
@@ -225,13 +237,28 @@ export default {
       },
       formOfEmploymentOptions: EmployeesEnum.hireType,
       deptsList: [], // 部门树形结构列表
-      showDeptsTree: false // 是否显示部门树
+      showDeptsTree: false, // 是否显示部门树
+      showAssignRoleDialog: false, // 是否显示分配角色
+      checkRoleList: [], // 选中角色列表
+      roleList: [] // 角色列表
     }
   },
   created() {
     this.getEmployeeList()
   },
   methods: {
+
+    async onAssignRole() {
+      this.showAssignRoleDialog = true // 显示角色弹框
+      const res = await getRoleList({ page: 1, pagesize: 100 })
+      this.roleList = res.rows
+    },
+
+    // 确定操作的方法
+    handelAssignRoleConfirm() {
+
+    },
+
     async onExport() {
       import('@/vendor/Export2Excel').then(async excel => {
         const headers = {

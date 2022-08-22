@@ -74,8 +74,9 @@ export default {
       }, (err, data) => {
         console.log(err || data)
         // 进度条开始
-        this.state = true
-        this.finished = false
+        this.finished = false // 进度条-是否结束
+        this.state = true // 进度条-是否开始
+
         // this.fileList.push({ url: 'http://' + data.Location })
         this.fileList[0].url = 'http://' + data.Location
       })

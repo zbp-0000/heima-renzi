@@ -385,14 +385,31 @@ export default {
   methods: {
     // 表单提交
     async saveUser() {
+      // 获取数据和状态，判断是否在上传中
+      const { fileList, started } = this.$refs.userInfoStaffPhotoRef
+      if (started) {
+        return this.$message.error('正在上传')
+      }
       // 提交修改的表单数据
-      await saveUserDetailById(this.userInfo)
+      await saveUserDetailById({
+        ...this.userInfo,
+        // 获取头像，上传发请求
+        staffPhoto: fileList[0].length > 0 ? fileList[0].url : undefined
+      })
       this.$message.success('操作成功')
     },
+
     // 表单提交
     async savePersonal() {
+      const { fileList, started } = this.$refs.userInfoStaffPhotoRef
+      if (started) {
+        return this.$message.error('正在上传')
+      }
       // 提交修改的表单数据
-      await updatePersonal(this.formData)
+      await updatePersonal({
+        ...this.userInfo,
+        staffPhoto: fileList[0].length > 0 ? fileList[0].url : undefined
+      })
       this.$message.success('操作成功')
     }
   }

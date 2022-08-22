@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <my-count v-if="isShow" ref="myCountRef"></my-count>
+    <button @click="onShow">显示</button></button>
+  </div>
+</body>
+<script>
+Vue.component('my-count',{
+  data(){
+    return {
+      count: 0
+    }
+  },
+
+  template: `
+    <button @click="count++">{{count}}</button>
+  `,
+  created() {
+    console.log(3)
+  },
+  destroyed() {
+  },
+})
+new Vue({
+  el: '#app',
+  data(){
+    return {
+      isShow: false
+    }
+  },
+  methods: {
+    onShow(){
+      /*不可以*/
+      /*
+      this.$nextTick(()=>{
+        this.$refs.myCountRef.count = 100
+      })
+      */
+      // 可以
+      /*
+      setTimeout(()=>{
+        this.$refs.myCountRef.count = 100
+      })
+      */
+      this.isShow = true
+      console.log(1)
+      // 修改isShow,控制组件显示,这个操作它是异步的(微任务)
+      // this.$refs.myCountRef.count = 100
+      /* 方式1-通过new Promise产生微任务
+      let p = new Promise((resolve,reject)=>{
+        console.log(4)
+        resolve()
+      })
+      p.then(()=>{
+        console.log(5)
+        this.$refs.myCountRef.count = 100
+      })
+      */
+      /* 方式2-通过Prmise.resolve语法糖*/
+      /*
+      Promise.resolve().then(()=>{
+        this.$refs.myCountRef.count = 100
+      })
+      */
+      /* 方式3-通过$nextTick*/
+      /*
+      this.$nextTick(()=>{
+        this.$refs.myCountRef.count = 100
+      })
+      */
+      // 方式4-通过setTimout
+      /*
+      setTimeout(()=>{
+        this.$refs.myCountRef.count = 100
+      })
+      */
+      console.log(2)
+      //异步代码
+      //定时器(宏任务)-setTimeout
+      //(微任务)Promise.then
+    }
+  }
+})
+</script>
+</html>

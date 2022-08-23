@@ -38,7 +38,8 @@ module.exports = {
     },
     proxy: {
       '/dev-api': {
-        target: 'http://ihrm-java.itheima.net',
+        // target: 'http://ihrm-java.itheima.net',
+        target: 'http://192.168.17.56:3000/', // 更换接口地址，重启服务
         changeOrigin: true,
         pathRewrite: {
           '^/dev-api': '/api'

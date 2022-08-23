@@ -67,10 +67,10 @@ export const constantRoutes = [
     path: '/learn-vuex',
     component: () => import('@/views/learnVuex/index.vue'),
     hidden: true
-  },
+  }
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 // 导入员工路由模块 / 引入多个模块的规则
@@ -99,7 +99,8 @@ export const asyncRouter = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: [...constantRoutes, ...asyncRouter] // 静态路由跟动态路由合并
+  // routes: [...constantRoutes, ...asyncRouter] // 静态路由跟动态路由合并
+  routes: [...constantRoutes] // 最终路由把动态移除
 })
 
 const router = createRouter()

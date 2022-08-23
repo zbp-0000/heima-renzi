@@ -38,7 +38,7 @@
               <!-- 插槽 -->
               <!-- v-slot="{row}" 获取这一行数据 -->
               <template v-slot="{row}">
-                <el-button size="small" type="success">分配权限</el-button>
+                <el-button size="small" type="success" @click="onAssignPerm(row.id)">分配权限</el-button>
                 <el-button size="small" type="primary" @click="onUpdate(row.id)">编辑</el-button>
                 <!-- @click="onDel(row.id)" 传入id -->
                 <el-button size="small" type="danger" @click="onDel(row.id)">删除</el-button>
@@ -105,13 +105,32 @@
           <el-button type="primary" @click="handelConfirm">确定</el-button>
         </el-row>
       </el-dialog>
+
+      <el-dialog title="分配权限" :visible.sync="showAssignPermDialog">
+        <el-tree
+          ref="treeRef"
+          :data="permList"
+          :props="{label: 'name'}"
+          show-checkbox
+          default-expand-all
+          node-key="id"
+          :default-checked-keys="checkedPermList"
+          check-strictly
+        />
+        <el-row slot="footer" type="flex" justify="center">
+          <el-button @click="showAssignPermDialog = false">取消</el-button>
+          <el-button type="primary" @click="handelAssignPermConfirm">确定</el-button>
+        </el-row>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
 import { getCompanyInfo } from '@/api/user'
-import { getRoleList, addRole, delRole, getRoleById, updateRole } from '@/api/setting.js'
+import { getRoleList, addRole, delRole, getRoleById, updateRole, assignPerm } from '@/api/setting.js'
+import { tranListToTreeData } from '@/utils'
+import { getPermissionList } from '@/api/permission'
 export default {
   name: 'Setting',
   components: {},
@@ -137,7 +156,11 @@ export default {
           trigger: 'blur'
         }],
         description: []
-      }
+      },
+      showAssignPermDialog: false, // 控制对话框的数据
+      permList: [],
+      checkedPermList: [], // 权限选中的数组
+      currentRoleId: undefined // 用户id
     }
   },
   async created() {
@@ -151,6 +174,32 @@ export default {
     // console.log('$options', this.$options)
   },
   methods: {
+
+    async onAssignPerm(id) {
+      this.currentRoleId = id // 把 id 保存起来
+      this.showAssignPermDialog = true
+
+      // 回显数据
+      const { permIds } = await getRoleById(id)
+      this.checkedPermList = permIds
+
+      // 转化为树形结构
+      this.permList = tranListToTreeData(await getPermissionList(), '0')
+    },
+
+    // 点击确定操作的方法
+    async handelAssignPermConfirm() {
+      await assignPerm({
+        id: this.currentRoleId,
+        permIds: this.$refs.treeRef.getCheckedKeys()
+      })
+      // 提示成功
+      this.$message.success('操作成功')
+      // 关闭对话框
+      this.showAssignPermDialog = false
+    },
+
+    // 点击编辑操作的方法
     async onUpdate(id) {
       this.showDialog = true // 显示编辑弹窗
       this.form = await getRoleById(id) // 或取数据，

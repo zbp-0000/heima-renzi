@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+
+// 普通数组
+let asyncRoutesStr = ['employees','departments','settings']
+//要求1-过滤出内容为'employees','settings'的数据
+let menus = ['employees','settings']
+let filterRoutesStr = []
+filterRoutesStr = asyncRoutesStr.filter((item) => {
+  return item !== 'departments'
+})
+console.log( '第一组',filterRoutesStr);
+
+// 对象数组
+let asyncRoutesObj = [{name: 'employees'}, {name: 'departments'}, {name: 'settings'}]
+//要求2-过滤出name为'employees','settings的数据
+let filterRoutesObj = []
+filterRoutesObj.push(asyncRoutesObj.filter(item => item.name !== 'departments'))
+console.log('第二组',filterRoutesObj);
+
+// 负责的对象数组
+let asyncRoutes = [
+  {chidren:[{name: 'employees'}]},
+  {chidren:[{name: 'departments'}]},
+  {chidren:[{name: 'settings'}]}
+]
+//要求3-过滤出子元素name为'employees','settings的数据
+let filterRoutes = asyncRoutes.filter(item => menus.includes(item.chidren[0].name))
+console.log('第三组',filterRoutes);
+</script>
+</html>

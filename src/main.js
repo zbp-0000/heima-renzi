@@ -54,6 +54,10 @@ Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
 //   const { mockXHR } = require('../mock')
 //   mockXHR()
 // }
+if (process.env.NODE_ENV === 'ddevelopment') {
+  // import '../mock/rzzt' // import 不能再嵌套内引入模块，只能在最外层！！！
+  require('../mock/rzzt') // require 可以
+}
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
@@ -61,6 +65,32 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+
+// 定义公共的方法-方式1-原型链
+// Vue.prototype.checkPermission = function(key) {
+//   return !this.$store.state.user.userInfo.roles.points.includes(key)
+// }
+
+// 定义公共的方法-方式2-混入
+Vue.mixin({
+  methods: {
+    checkPermission: function(key) {
+      // 防止公共代码报错，使用没有数值的数据
+      // if (this.$store.state.user.userInfo && this.$store.state.user.userInfo.roles && this.$store.state.user.userInfo.roles.points) {
+      //   !this.$store.state.user.userInfo.roles.points.includes(key)
+      // } else {
+      //   return false
+      // }
+
+      // 防止公共代码报错，使用没有数值的数据-方式2-通过try-catch
+      try {
+        return !this.$store.state.user.userInfo.roles.points.includes(key)
+      } catch (error) {
+        return false
+      }
+    }
+  }
+})
 
 new Vue({
   el: '#app',

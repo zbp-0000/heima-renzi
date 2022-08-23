@@ -6,7 +6,7 @@ export default {
     // path: '' 默认路由
     // 当访问/social默认访问到页面
     path: '',
-    name: 'social',
+    name: 'social_securitys',
     component: () => import('@/views/social/index.vue'),
     meta: { title: '社保', icon: 'table' }
   }]

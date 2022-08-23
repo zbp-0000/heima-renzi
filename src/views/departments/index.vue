@@ -14,7 +14,8 @@
 
         <tree-tools :data="company">
           <!-- 使用插槽 子组件用 <slot /> 接受 -->
-          <el-dropdown-item @click.native="onAdd(company)">新增子部门</el-dropdown-item>
+          <!-- checkPermission 将这个方法放到原型链上，这样直接访问（在 main.js 模块里定义的） -->
+          <el-dropdown-item :disabled="checkPermission('add-dept')" @click.native="onAdd(company)">新增子部门</el-dropdown-item>
         </tree-tools>
 
         <!-- 树形控件 -->
@@ -25,7 +26,9 @@
           <tree-tools slot-scope="{data}" :data="data">
             <!-- 使用插槽 子组件用 <slot /> 接受 -->
             <!-- 为什么要用插槽？后面操作更加方便，不封装在子组件，比如删除之类的，减少不必要的通信 -->
-            <el-dropdown-item @click.native="onAdd(company)">新增子部门</el-dropdown-item>
+
+            <!-- checkPermission 将这个方法放到原型链上，这样直接访问（在 main.js 模块里定义的） -->
+            <el-dropdown-item :disabled="checkPermission('add-dept')" @click.native="onAdd(company)">新增子部门</el-dropdown-item>
             <el-dropdown-item @click.native="onUpdate(data)">编辑部门</el-dropdown-item>
             <el-dropdown-item @click.native="onDel(data.id)">删除部门</el-dropdown-item>
           </tree-tools>
@@ -80,6 +83,12 @@ export default {
   },
   mounted() {},
   methods: {
+
+    // 解决问题1-模板太长
+    // checkPermission(key) {
+    //   return !this.$store.state.user.userInfo.roles.points.includes(key)
+    // },
+
     // 新增子部门
     onAdd(node) {
       this.currentNode = node

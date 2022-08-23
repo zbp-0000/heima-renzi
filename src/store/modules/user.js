@@ -37,16 +37,18 @@ export default {
 
   // 异步修改
   actions: {
-    // 退出时,清空公共(用户)数据
+    // 退出时,清空公共(用户)数据 semoveRoutes
     logout(context) {
       context.commit('removeToken')
       context.commit('removeUserInfo')
+      context.commit('permission/semoveRoutes', null, { root: true })
     },
 
     async getUserInfo(context) {
       const u = await getUserBaseInfo() // u 这个接口 里面有用户 id
       const e = await getEmplyeeBaseInfo(u.Id) // 这个接口需要传一个 用户id
       context.commit('setUserInfo', { ...u, ...e })
+      return u
     },
 
     // 调用登录接口

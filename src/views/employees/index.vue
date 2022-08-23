@@ -142,7 +142,7 @@
         <el-checkbox v-for="(item, index) in roleList" :key="index" :label="item.id">{{ item.name }}</el-checkbox>
       </el-checkbox-group>
 
-      <el-row slot="footer" type="fiex" justify="center">
+      <el-row slot="footer" type="flex" justify="center">
         <el-button @click="showAssignRoleDialog = false">取消</el-button>
         <el-button type="primary" @click="handelAssignRoleConfirm">确认</el-button>
       </el-row>
@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import { addEmployee, delEmployee, getEmployeeList } from '@/api/employees'
+import { addEmployee, assignRoles, delEmployee, getEmployeeList } from '@/api/employees'
 import { pick } from 'lodash'
 import EmployeesEnum from '@/api/constant/employees' // 枚举的数据
 import QrcodeVue from 'qrcode.vue'
@@ -159,6 +159,7 @@ import { getDepartments } from '@/api/departments'
 import { tranListToTreeData } from '@/utils'
 import { formatDate } from '@/filters'
 import { getRoleList } from '@/api/setting'
+import { getEmplyeeBaseInfo } from '@/api/user'
 // import { appendFileSync } from 'fs'
 export default {
   name: 'EmployeesIndex',
@@ -240,7 +241,8 @@ export default {
       showDeptsTree: false, // 是否显示部门树
       showAssignRoleDialog: false, // 是否显示分配角色
       checkRoleList: [], // 选中角色列表
-      roleList: [] // 角色列表
+      roleList: [], // 角色列表
+      currentUserId: undefined
     }
   },
   created() {
@@ -248,15 +250,28 @@ export default {
   },
   methods: {
 
-    async onAssignRole() {
+    async onAssignRole(id) {
+      this.currentUserId = id
       this.showAssignRoleDialog = true // 显示角色弹框
       const res = await getRoleList({ page: 1, pagesize: 100 })
+
+      // 根据id获取当前用户的角色列表
+      const { roleIds } = await getEmplyeeBaseInfo(id)
+      this.checkRoleList = roleIds
+
       this.roleList = res.rows
     },
 
     // 确定操作的方法
-    handelAssignRoleConfirm() {
+    async handelAssignRoleConfirm() {
+      // 调接口
+      await assignRoles({
+        id: this.currentUserId,
+        roleIds: this.checkRoleList
+      })
 
+      this.$message.success('操作成功') // 成功的提示
+      this.showAssignRoleDialog = false // 关闭对话框
     },
 
     async onExport() {
@@ -271,7 +286,6 @@ export default {
           '部门': 'departmentName'
         }
         const { rows } = await getEmployeeList({ page: 1, size: this.page.total })
-        console.log(rows)
 
         // 导出 excle 表格
         const data = rows.map(t => {
